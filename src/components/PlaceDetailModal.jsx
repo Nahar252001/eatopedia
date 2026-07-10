@@ -24,6 +24,18 @@ export default function PlaceDetailModal({ place, onClose, isSaved, onToggleSave
     return filtered.slice(0, 6);
   }, [place, allPlaces, activeCategory]);
 
+  const getAmenityConfig = (amKey) => {
+    try {
+      const saved = localStorage.getItem('eatopedia_amenities');
+      if (saved) {
+        const list = JSON.parse(saved);
+        const found = list.find(item => item.key === amKey);
+        if (found) return found;
+      }
+    } catch (e) {}
+    return AMENITIES_CONFIG[amKey];
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center md:items-center bg-on-surface/50 backdrop-blur-sm p-0 md:p-6 transition-all duration-300">
       {/* Backdrop click close */}
@@ -262,7 +274,7 @@ export default function PlaceDetailModal({ place, onClose, isSaved, onToggleSave
                 <h4 className="font-display font-bold text-base text-on-surface">Amenities</h4>
                 <div className="flex items-center gap-3.5">
                   {place.amenities.map(am => {
-                    const cfg = AMENITIES_CONFIG[am];
+                    const cfg = getAmenityConfig(am);
                     if (!cfg) return null;
                     return (
                       <div 

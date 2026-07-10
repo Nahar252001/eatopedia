@@ -5,15 +5,8 @@ const CATEGORIES_CONFIG = {
   best_ambience: { label: "Best Ambience", emoji: "📸" },
   romantic: { label: "Romantic Date Spots", emoji: "💕" }
 };
-const AMENITIES_LIST = [
-  { key: "wifi", label: "Fast Wi-Fi", icon: "wifi" },
-  { key: "outlets", label: "Power Outlets", icon: "electrical_services" },
-  { key: "pets", label: "Pet Friendly", icon: "pets" },
-  { key: "parking", label: "Free Parking", icon: "local_parking" }
-];
-
 export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDeletePlace }) {
-  const [subTab, setSubTab] = useState('list'); // list, onboard, locations
+  const [subTab, setSubTab] = useState('list'); // list, onboard, locations, amenities
   const [editingPlace, setEditingPlace] = useState(null);
 
   // Locations State
@@ -23,6 +16,26 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
       return saved ? JSON.parse(saved) : ["Vesu", "Piplod", "Adajan", "City Light", "Dumas Road"];
     } catch (e) {
       return ["Vesu", "Piplod", "Adajan", "City Light", "Dumas Road"];
+    }
+  });
+
+  // Amenities State
+  const [amenitiesList, setAmenitiesList] = useState(() => {
+    try {
+      const saved = localStorage.getItem('eatopedia_amenities');
+      return saved ? JSON.parse(saved) : [
+        { key: "wifi", label: "Fast Wi-Fi", icon: "wifi" },
+        { key: "outlets", label: "Power Outlets", icon: "electrical_services" },
+        { key: "pets", label: "Pet Friendly", icon: "pets" },
+        { key: "parking", label: "Free Parking", icon: "local_parking" }
+      ];
+    } catch (e) {
+      return [
+        { key: "wifi", label: "Fast Wi-Fi", icon: "wifi" },
+        { key: "outlets", label: "Power Outlets", icon: "electrical_services" },
+        { key: "pets", label: "Pet Friendly", icon: "pets" },
+        { key: "parking", label: "Free Parking", icon: "local_parking" }
+      ];
     }
   });
 
@@ -58,6 +71,13 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
   const [newLocation, setNewLocation] = useState('');
   const [editingLocation, setEditingLocation] = useState(null);
   const [renameValue, setRenameValue] = useState('');
+
+  // Amenities management form states
+  const [newAmenityLabel, setNewAmenityLabel] = useState('');
+  const [newAmenityIcon, setNewAmenityIcon] = useState('');
+  const [editingAmenityKey, setEditingAmenityKey] = useState(null);
+  const [editAmenityLabel, setEditAmenityLabel] = useState('');
+  const [editAmenityIcon, setEditAmenityIcon] = useState('');
 
   // Load editing values when editingPlace changes
   useEffect(() => {
@@ -338,67 +358,166 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
     }
   };
 
+  const handleAddAmenity = (e) => {
+    e.preventDefault();
+    const labelTrimmed = newAmenityLabel.trim();
+    const iconTrimmed = newAmenityIcon.trim();
+    if (!labelTrimmed || !iconTrimmed) return alert("Please specify both label and icon.");
+
+    const key = labelTrimmed.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+
+    if (amenitiesList.some(am => am.key === key)) {
+      return alert(`An amenity with identifier "${key}" already exists.`);
+    }
+
+    const updated = [...amenitiesList, { key, label: labelTrimmed, icon: iconTrimmed }];
+    setAmenitiesList(updated);
+    try {
+      localStorage.setItem('eatopedia_amenities', JSON.stringify(updated));
+    } catch (err) {}
+
+    setNewAmenityLabel('');
+    setNewAmenityIcon('');
+  };
+
+  const handleStartAmenityEdit = (am) => {
+    setEditingAmenityKey(am.key);
+    setEditAmenityLabel(am.label);
+    setEditAmenityIcon(am.icon);
+  };
+
+  const handleSaveAmenityEdit = (key) => {
+    const labelTrimmed = editAmenityLabel.trim();
+    const iconTrimmed = editAmenityIcon.trim();
+    if (!labelTrimmed || !iconTrimmed) return alert("Please specify both label and icon.");
+
+    const updated = amenitiesList.map(am => am.key === key ? { ...am, label: labelTrimmed, icon: iconTrimmed } : am);
+    setAmenitiesList(updated);
+    try {
+      localStorage.setItem('eatopedia_amenities', JSON.stringify(updated));
+    } catch (err) {}
+
+    setEditingAmenityKey(null);
+    alert(`Amenity "${labelTrimmed}" has been successfully updated!`);
+  };
+
+  const handleDeleteAmenity = (key, label) => {
+    if (window.confirm(`Are you sure you want to delete the amenity "${label}"?`)) {
+      const updated = amenitiesList.filter(am => am.key !== key);
+      setAmenitiesList(updated);
+      try {
+        localStorage.setItem('eatopedia_amenities', JSON.stringify(updated));
+      } catch (err) {}
+
+      // Remove this amenity from all cafés' selection lists
+      places.forEach(place => {
+        if (place.amenities && place.amenities.includes(key)) {
+          onEditPlace({
+            ...place,
+            amenities: place.amenities.filter(am => am !== key)
+          });
+        }
+      });
+
+      alert(`"${label}" has been deleted.`);
+    }
+  };
+
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
+    <div className="flex flex-col md:flex-row gap-8 animate-in fade-in duration-300">
       
-      {/* Header Info */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-outline-variant/15 pb-6">
-        <div className="space-y-1.5">
-          <button 
-            onClick={() => window.location.hash = '#/'}
-            className="inline-flex items-center gap-1.5 text-xs text-secondary hover:text-primary font-bold transition-colors mb-1.5 active-scale"
-          >
-            <span className="material-symbols-outlined text-[16px]">arrow_back</span>
-            Exit to Main App
-          </button>
-          <h2 className="font-serif font-extrabold text-3xl text-primary tracking-tight">Eatopedia Admin Console</h2>
-          <p className="text-secondary text-xs mt-0.5 font-body">Onboard new discoveries, revise menu cards, or manage existing cafe catalogs.</p>
+      {/* Left Sidebar Nav */}
+      <aside className="w-full md:w-64 flex-shrink-0 space-y-6">
+        {/* Brand/Logo Card */}
+        <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-5 space-y-3 shadow-sm">
+          <div className="space-y-1">
+            <h2 className="font-serif font-extrabold text-2xl text-primary tracking-tight">Eatopedia</h2>
+            <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block">Admin Console</span>
+          </div>
+          <p className="text-secondary text-[11px] leading-relaxed font-body">Onboard new discoveries, revise menu cards, or configure locations.</p>
         </div>
 
-        {/* Console Nav Tabs */}
-        <div className="inline-flex bg-surface-container rounded-full p-1 border border-outline-variant/10">
+        {/* Navigation list */}
+        <nav className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-2.5 shadow-sm flex flex-col gap-1">
           <button 
             type="button"
             onClick={() => { setSubTab('list'); setEditingPlace(null); }}
-            className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all active-scale ${
+            className={`w-full px-4 py-3 rounded-2xl text-xs font-bold flex items-center gap-3 transition-all active-scale justify-start ${
               subTab === 'list' 
                 ? 'bg-primary text-on-primary shadow-sm' 
-                : 'text-secondary hover:text-on-surface'
+                : 'text-secondary hover:text-on-surface hover:bg-surface-container-high/40'
             }`}
           >
-            <span className="material-symbols-outlined text-[16px]">list</span>
-            Active Catalogs ({places.length})
+            <span className="material-symbols-outlined text-[18px]">list</span>
+            <span>Active Catalogs</span>
+            <span className={`ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full ${
+              subTab === 'list' ? 'bg-on-primary/15 text-on-primary' : 'bg-surface-container-high text-secondary'
+            }`}>{places.length}</span>
           </button>
           
           <button 
             type="button"
             onClick={() => { setSubTab('onboard'); }}
-            className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all active-scale ${
+            className={`w-full px-4 py-3 rounded-2xl text-xs font-bold flex items-center gap-3 transition-all active-scale justify-start ${
               subTab === 'onboard' 
                 ? 'bg-primary text-on-primary shadow-sm' 
-                : 'text-secondary hover:text-on-surface'
+                : 'text-secondary hover:text-on-surface hover:bg-surface-container-high/40'
             }`}
           >
-            <span className="material-symbols-outlined text-[16px]">{editingPlace ? 'edit' : 'add'}</span>
-            {editingPlace ? 'Revise Cafe' : 'Onboard Cafe'}
+            <span className="material-symbols-outlined text-[18px]">{editingPlace ? 'edit' : 'add'}</span>
+            <span>{editingPlace ? 'Revise Cafe' : 'Onboard Cafe'}</span>
           </button>
 
           <button 
             type="button"
             onClick={() => { setSubTab('locations'); setEditingPlace(null); }}
-            className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all active-scale ${
+            className={`w-full px-4 py-3 rounded-2xl text-xs font-bold flex items-center gap-3 transition-all active-scale justify-start ${
               subTab === 'locations' 
                 ? 'bg-primary text-on-primary shadow-sm' 
-                : 'text-secondary hover:text-on-surface'
+                : 'text-secondary hover:text-on-surface hover:bg-surface-container-high/40'
             }`}
           >
-            <span className="material-symbols-outlined text-[16px]">location_on</span>
-            Manage Locations ({locations.length})
+            <span className="material-symbols-outlined text-[18px]">location_on</span>
+            <span>Area Configuration</span>
+            <span className={`ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full ${
+              subTab === 'locations' ? 'bg-on-primary/15 text-on-primary' : 'bg-surface-container-high text-secondary'
+            }`}>{locations.length}</span>
+          </button>
+
+          <button 
+            type="button"
+            onClick={() => { setSubTab('amenities'); setEditingPlace(null); }}
+            className={`w-full px-4 py-3 rounded-2xl text-xs font-bold flex items-center gap-3 transition-all active-scale justify-start ${
+              subTab === 'amenities' 
+                ? 'bg-primary text-on-primary shadow-sm' 
+                : 'text-secondary hover:text-on-surface hover:bg-surface-container-high/40'
+            }`}
+          >
+            <span className="material-symbols-outlined text-[18px]">settings</span>
+            <span>Manage Amenities</span>
+            <span className={`ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full ${
+              subTab === 'amenities' ? 'bg-on-primary/15 text-on-primary' : 'bg-surface-container-high text-secondary'
+            }`}>{amenitiesList.length}</span>
+          </button>
+        </nav>
+
+        {/* Exit Card */}
+        <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-3 shadow-sm">
+          <button 
+            type="button"
+            onClick={() => window.location.hash = '#/'}
+            className="w-full py-2.5 px-4 bg-primary/10 hover:bg-primary text-primary hover:text-on-primary rounded-2xl text-xs font-bold transition-all active-scale flex items-center justify-center gap-2"
+          >
+            <span className="material-symbols-outlined text-[16px]">arrow_back</span>
+            <span>Exit to Main App</span>
           </button>
         </div>
-      </div>
+      </aside>
 
-      {subTab === 'list' ? (
+      {/* Right Content Pane */}
+      <div className="flex-1 min-w-0">
+
+        {subTab === 'list' && (
         /* ACTIVE PLACES LIST VIEW */
         <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl overflow-hidden shadow-sm">
           
@@ -493,7 +612,9 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
             </div>
           )}
         </div>
-      ) : (
+      )}
+
+      {subTab === 'onboard' && (
         /* ADD & ONBOARD FORM CARD VIEW */
         <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-6 shadow-sm max-w-3xl mx-auto">
           
@@ -651,7 +772,7 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-secondary uppercase tracking-wider block">Select Amenities</label>
                   <div className="grid grid-cols-2 gap-2">
-                    {AMENITIES_LIST.map(am => (
+                    {amenitiesList.map(am => (
                       <label key={am.key} className="flex items-center gap-1.5 cursor-pointer text-xs text-on-surface-variant hover:text-on-surface">
                         <input 
                           type="checkbox"
@@ -883,6 +1004,138 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
         </div>
       )}
 
+      {subTab === 'amenities' && (
+        <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-6 shadow-sm max-w-2xl mx-auto space-y-6">
+          <div>
+            <h3 className="font-display font-extrabold text-xl text-primary tracking-tight">Manage Amenities</h3>
+            <p className="text-secondary text-xs mt-0.5 font-body">Create, configure, or delete café amenities. These will appear as selection choices when onboarding cafés.</p>
+          </div>
+
+          {/* Add Amenity Form */}
+          <form onSubmit={handleAddAmenity} className="bg-surface-container/30 p-4 rounded-2xl border border-outline-variant/10 space-y-3.5">
+            <h4 className="font-bold text-[10px] text-primary uppercase tracking-wider block">Add New Amenity</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-secondary uppercase tracking-wider">Amenity Label *</label>
+                <input 
+                  type="text" 
+                  value={newAmenityLabel} 
+                  onChange={(e) => setNewAmenityLabel(e.target.value)}
+                  placeholder="e.g. Live Music"
+                  className="px-3 py-2 bg-surface-container border border-outline-variant/35 text-on-surface rounded-xl focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent text-xs"
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-[10px] font-bold text-secondary uppercase tracking-wider">Material Icon Code *</label>
+                <input 
+                  type="text" 
+                  value={newAmenityIcon} 
+                  onChange={(e) => setNewAmenityIcon(e.target.value)}
+                  placeholder="e.g. music_note, deck, child_care"
+                  className="px-3 py-2 bg-surface-container border border-outline-variant/35 text-on-surface rounded-xl focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent text-xs"
+                  required
+                />
+              </div>
+            </div>
+            <button 
+              type="submit"
+              className="w-full py-2 bg-primary text-on-primary rounded-xl text-xs font-bold transition-all active-scale hover:bg-primary-container h-[34px]"
+            >
+              Add Amenity
+            </button>
+          </form>
+
+          {/* Amenities List */}
+          <div className="border border-outline-variant/15 rounded-2xl overflow-hidden">
+            <table className="w-full text-left border-collapse text-xs font-body">
+              <thead>
+                <tr className="bg-surface-container text-secondary font-bold uppercase tracking-wider text-[10px] border-b border-outline-variant/15">
+                  <th className="p-4 pl-6">Icon</th>
+                  <th className="p-4">Amenity Name</th>
+                  <th className="p-4">Key Identifier</th>
+                  <th className="p-4 text-right pr-6">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-outline-variant/10">
+                {amenitiesList.map(am => {
+                  const isEditing = editingAmenityKey === am.key;
+
+                  return (
+                    <tr key={am.key} className="hover:bg-surface-container/30 transition-colors">
+                      <td className="p-4 pl-6">
+                        <span className="material-symbols-outlined text-[20px] text-secondary">{isEditing ? editAmenityIcon : am.icon}</span>
+                      </td>
+                      <td className="p-4">
+                        {isEditing ? (
+                          <div className="space-y-2">
+                            <input 
+                              type="text"
+                              value={editAmenityLabel}
+                              onChange={(e) => setEditAmenityLabel(e.target.value)}
+                              className="px-3 py-1 bg-surface-container border border-outline-variant/35 text-on-surface rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent text-xs w-full max-w-[200px]"
+                              required
+                            />
+                            <input 
+                              type="text"
+                              value={editAmenityIcon}
+                              onChange={(e) => setEditAmenityIcon(e.target.value)}
+                              className="px-3 py-1 bg-surface-container border border-outline-variant/35 text-on-surface rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent text-xs w-full max-w-[200px] block"
+                              required
+                            />
+                          </div>
+                        ) : (
+                          <span className="font-bold text-on-surface text-sm">{am.label}</span>
+                        )}
+                      </td>
+                      <td className="p-4 text-secondary font-mono text-[10px]">{am.key}</td>
+                      <td className="p-4 text-right pr-6 whitespace-nowrap">
+                        {isEditing ? (
+                          <div className="flex items-center justify-end gap-2">
+                            <button 
+                              type="button"
+                              onClick={() => handleSaveAmenityEdit(am.key)}
+                              className="px-3 py-1.5 bg-primary text-on-primary rounded-xl font-bold transition-all active-scale"
+                            >
+                              Save
+                            </button>
+                            <button 
+                              type="button"
+                              onClick={() => setEditingAmenityKey(null)}
+                              className="px-3 py-1.5 bg-surface-container text-secondary rounded-xl font-bold transition-all active-scale"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-end gap-2">
+                            <button 
+                              type="button"
+                              onClick={() => handleStartAmenityEdit(am)}
+                              className="px-3 py-1.5 bg-background border border-outline-variant/30 text-secondary hover:text-primary rounded-xl font-bold transition-all active-scale"
+                            >
+                              Edit
+                            </button>
+                            <button 
+                              type="button"
+                              onClick={() => handleDeleteAmenity(am.key, am.label)}
+                              className="px-3 py-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-on-primary rounded-xl font-bold transition-all active-scale"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      </div>
     </div>
   );
 }
