@@ -501,6 +501,34 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
           </button>
         </nav>
 
+        {/* Data Backup Card */}
+        <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-5 space-y-3 shadow-sm">
+          <div className="space-y-1">
+            <span className="text-[9px] font-bold text-primary uppercase tracking-wider block">Deploy Permanently</span>
+            <p className="text-secondary text-[10px] leading-relaxed font-body">
+              Onboarded spots are stored in your local browser. Copy the database JSON and paste it to me in the chat to save them forever.
+            </p>
+          </div>
+          <button 
+            type="button"
+            onClick={() => {
+              const exportData = {
+                customPlaces: JSON.parse(localStorage.getItem('mojmaa_custom_places') || '[]'),
+                editedDefaults: JSON.parse(localStorage.getItem('mojmaa_edited_default_places') || '[]'),
+                deletedPlaces: JSON.parse(localStorage.getItem('mojmaa_deleted_places') || '[]'),
+                locations: JSON.parse(localStorage.getItem('eatopedia_locations') || '[]'),
+                amenities: JSON.parse(localStorage.getItem('eatopedia_amenities') || '[]')
+              };
+              navigator.clipboard.writeText(JSON.stringify(exportData, null, 2));
+              alert("Database copied to clipboard! Paste this JSON to me in our chat to deploy it permanently.");
+            }}
+            className="w-full py-2 bg-secondary/10 hover:bg-secondary/20 text-on-surface hover:text-primary rounded-xl text-[10px] font-bold transition-all active-scale flex items-center justify-center gap-1.5 border border-outline-variant/25"
+          >
+            <span className="material-symbols-outlined text-[15px]">content_copy</span>
+            <span>Copy Database JSON</span>
+          </button>
+        </div>
+
         {/* Exit Card */}
         <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-3 shadow-sm">
           <button 

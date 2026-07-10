@@ -269,7 +269,7 @@ export default function App() {
               </h3>
               {(selectedCategory ? filteredPlaces : placesList).length > 0 ? (
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-                  {(selectedCategory ? filteredPlaces : placesList).slice(0, 3).map(place => (
+                  {(selectedCategory ? filteredPlaces : placesList).map(place => (
                     <PlaceCard 
                       key={place.id}
                       place={place}
