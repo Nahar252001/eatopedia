@@ -8,7 +8,6 @@ import SavedPlaces from './components/SavedPlaces';
 import MoodsView from './components/MoodsView';
 import SearchOverlay from './components/SearchOverlay';
 import ProfileView from './components/ProfileView';
-import SuratMapView from './components/SuratMapView';
 import AdminDashboard from './components/AdminDashboard';
 import { PLACES, CATEGORIES } from './data/places';
 
@@ -29,8 +28,6 @@ export default function App() {
       return [];
     }
   });
-
-  const [viewMode, setViewMode] = useState('grid'); // grid or map
 
   // Hash Routing State
   const [currentHash, setCurrentHash] = useState(window.location.hash);
@@ -250,37 +247,11 @@ export default function App() {
         
         {activeTab === 'discover' && (
           <div className="space-y-6 animate-in fade-in duration-300">
-            {/* Hero Header & View Mode Toggle */}
-            <section className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-4 mt-2">
+            {/* Hero Header */}
+            <section className="flex flex-col mb-4 mt-2">
               <h2 className="font-serif font-bold text-3xl md:text-5xl text-on-surface tracking-tight leading-tight max-w-xl">
                 What kind of experience are you looking for?
               </h2>
-              
-              {/* View Mode Switcher */}
-              <div className="inline-flex bg-surface-container rounded-full p-1 border border-outline-variant/10 self-start md:self-end">
-                <button 
-                  onClick={() => setViewMode('grid')}
-                  className={`px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all active-scale ${
-                    viewMode === 'grid' 
-                      ? 'bg-primary text-on-primary shadow-md' 
-                      : 'text-secondary hover:text-on-surface'
-                  }`}
-                >
-                  <span className="material-symbols-outlined text-[16px]">grid_view</span>
-                  Grid
-                </button>
-                <button 
-                  onClick={() => setViewMode('map')}
-                  className={`px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all active-scale ${
-                    viewMode === 'map' 
-                      ? 'bg-primary text-on-primary shadow-md' 
-                      : 'text-secondary hover:text-on-surface'
-                  }`}
-                >
-                  <span className="material-symbols-outlined text-[16px]">map</span>
-                  Map View
-                </button>
-              </div>
             </section>
 
             {/* Categories Scroll */}
@@ -289,34 +260,25 @@ export default function App() {
               onSelectCategory={setSelectedCategory}
             />
 
-            {viewMode === 'grid' ? (
-              <div className="space-y-4 pt-4 animate-in fade-in duration-300">
-                <h3 className="font-serif font-bold text-lg text-secondary tracking-tight">
-                  {selectedCategory 
-                    ? `${CATEGORIES[selectedCategory]?.emoji || '✨'} Suggested for ${CATEGORIES[selectedCategory]?.label || 'You'}`
-                    : "Today's Suggestions"
-                  }
-                </h3>
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-                  {(selectedCategory ? filteredPlaces : placesList).slice(0, 3).map(place => (
-                    <PlaceCard 
-                      key={place.id}
-                      place={place}
-                      onSelect={setSelectedPlace}
-                      isSaved={savedPlaceIds.includes(place.id)}
-                      onToggleSave={handleToggleSave}
-                    />
-                  ))}
-                </div>
+            <div className="space-y-4 pt-4 animate-in fade-in duration-300">
+              <h3 className="font-serif font-bold text-lg text-secondary tracking-tight">
+                {selectedCategory 
+                  ? `${CATEGORIES[selectedCategory]?.emoji || '✨'} Suggested for ${CATEGORIES[selectedCategory]?.label || 'You'}`
+                  : "Today's Suggestions"
+                }
+              </h3>
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                {(selectedCategory ? filteredPlaces : placesList).slice(0, 3).map(place => (
+                  <PlaceCard 
+                    key={place.id}
+                    place={place}
+                    onSelect={setSelectedPlace}
+                    isSaved={savedPlaceIds.includes(place.id)}
+                    onToggleSave={handleToggleSave}
+                  />
+                ))}
               </div>
-            ) : (
-              <div className="pt-4">
-                <SuratMapView 
-                  places={filteredPlaces}
-                  onSelectPlace={setSelectedPlace}
-                />
-              </div>
-            )}
+            </div>
           </div>
         )}
 
