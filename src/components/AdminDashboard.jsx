@@ -13,9 +13,9 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
   const [locations, setLocations] = useState(() => {
     try {
       const saved = localStorage.getItem('eatopedia_locations');
-      return saved ? JSON.parse(saved) : ["Vesu", "Piplod", "Adajan", "City Light", "Dumas Road"];
+      return saved ? JSON.parse(saved) : ["Vesu", "Piplod", "Adajan", "City Light", "Dumas Road", "Katargam", "Ghod Dod Rd", "Pal"];
     } catch (e) {
-      return ["Vesu", "Piplod", "Adajan", "City Light", "Dumas Road"];
+      return ["Vesu", "Piplod", "Adajan", "City Light", "Dumas Road", "Katargam", "Ghod Dod Rd", "Pal"];
     }
   });
 
@@ -44,7 +44,7 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
   const [area, setArea] = useState(() => {
     try {
       const saved = localStorage.getItem('eatopedia_locations');
-      const locs = saved ? JSON.parse(saved) : ["Vesu", "Piplod", "Adajan", "City Light", "Dumas Road"];
+      const locs = saved ? JSON.parse(saved) : ["Vesu", "Piplod", "Adajan", "City Light", "Dumas Road", "Katargam", "Ghod Dod Rd", "Pal"];
       return locs[0] || '';
     } catch (e) {
       return 'Vesu';
