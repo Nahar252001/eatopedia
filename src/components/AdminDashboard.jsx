@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-const AREAS = ["Vesu", "Piplod", "Adajan", "City Light", "Dumas Road"];
 const CATEGORIES_CONFIG = {
   best_food: { label: "Best Food", emoji: "🍽️" },
   best_ambience: { label: "Best Ambience", emoji: "📸" },
@@ -14,12 +13,30 @@ const AMENITIES_LIST = [
 ];
 
 export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDeletePlace }) {
-  const [subTab, setSubTab] = useState('list'); // list or onboard
+  const [subTab, setSubTab] = useState('list'); // list, onboard, locations
   const [editingPlace, setEditingPlace] = useState(null);
+
+  // Locations State
+  const [locations, setLocations] = useState(() => {
+    try {
+      const saved = localStorage.getItem('eatopedia_locations');
+      return saved ? JSON.parse(saved) : ["Vesu", "Piplod", "Adajan", "City Light", "Dumas Road"];
+    } catch (e) {
+      return ["Vesu", "Piplod", "Adajan", "City Light", "Dumas Road"];
+    }
+  });
 
   // Form states
   const [name, setName] = useState('');
-  const [area, setArea] = useState('Vesu');
+  const [area, setArea] = useState(() => {
+    try {
+      const saved = localStorage.getItem('eatopedia_locations');
+      const locs = saved ? JSON.parse(saved) : ["Vesu", "Piplod", "Adajan", "City Light", "Dumas Road"];
+      return locs[0] || '';
+    } catch (e) {
+      return 'Vesu';
+    }
+  });
   const [address, setAddress] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -36,6 +53,11 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
     { name: '', tag: 'Beverage', description: '', price: '' },
     { name: '', tag: 'Best Seller', description: '', price: '' }
   ]);
+
+  // Locations management states
+  const [newLocation, setNewLocation] = useState('');
+  const [editingLocation, setEditingLocation] = useState(null);
+  const [renameValue, setRenameValue] = useState('');
 
   // Load editing values when editingPlace changes
   useEffect(() => {
@@ -71,7 +93,7 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
     } else {
       // Reset form
       setName('');
-      setArea('Vesu');
+      setArea(locations[0] || '');
       setAddress('');
       setPhotoUrl('');
       setSelectedCategories([]);
@@ -89,7 +111,7 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
         { name: '', tag: 'Best Seller', description: '', price: '' }
       ]);
     }
-  }, [editingPlace]);
+  }, [editingPlace, locations]);
 
   const handleCategoryToggle = (catKey) => {
     if (selectedCategories.includes(catKey)) {
@@ -233,6 +255,89 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
     }
   };
 
+  const handleAddLocation = (e) => {
+    e.preventDefault();
+    const trimmed = newLocation.trim();
+    if (!trimmed) return alert("Please specify a location name.");
+    
+    if (locations.some(loc => loc.toLowerCase() === trimmed.toLowerCase())) {
+      return alert(`"${trimmed}" already exists.`);
+    }
+
+    const updated = [...locations, trimmed];
+    setLocations(updated);
+    try {
+      localStorage.setItem('eatopedia_locations', JSON.stringify(updated));
+    } catch (err) {}
+    setNewLocation('');
+  };
+
+  const handleStartRename = (loc) => {
+    setEditingLocation(loc);
+    setRenameValue(loc);
+  };
+
+  const handleSaveRename = (oldName) => {
+    const trimmed = renameValue.trim();
+    if (!trimmed) return alert("Please specify a location name.");
+    
+    if (trimmed !== oldName && locations.some(loc => loc.toLowerCase() === trimmed.toLowerCase())) {
+      return alert(`"${trimmed}" already exists.`);
+    }
+
+    const updated = locations.map(loc => loc === oldName ? trimmed : loc);
+    setLocations(updated);
+    try {
+      localStorage.setItem('eatopedia_locations', JSON.stringify(updated));
+    } catch (err) {}
+
+    // Cascade rename to all cafés
+    places.forEach(place => {
+      if (place.area === oldName) {
+        onEditPlace({
+          ...place,
+          area: trimmed
+        });
+      }
+    });
+
+    setEditingLocation(null);
+    setRenameValue('');
+    alert(`Location renamed to "${trimmed}". All associated cafés have been updated!`);
+  };
+
+  const handleDeleteLocation = (locName) => {
+    const cafeCount = places.filter(p => p.area === locName).length;
+    let confirmMsg = `Are you sure you want to delete "${locName}"?`;
+    if (cafeCount > 0) {
+      confirmMsg += `\nWarning: ${cafeCount} café(s) are currently situated in this area. They will be reassigned.`;
+    }
+
+    if (window.confirm(confirmMsg)) {
+      let remaining = locations.filter(loc => loc !== locName);
+      if (remaining.length === 0) {
+        remaining = ['Unassigned'];
+      }
+      setLocations(remaining);
+      try {
+        localStorage.setItem('eatopedia_locations', JSON.stringify(remaining));
+      } catch (err) {}
+
+      // Cascade delete: reassign cafés to next available area
+      const fallbackArea = remaining[0];
+      places.forEach(place => {
+        if (place.area === locName) {
+          onEditPlace({
+            ...place,
+            area: fallbackArea
+          });
+        }
+      });
+
+      alert(`"${locName}" has been deleted.`);
+    }
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       
@@ -253,6 +358,7 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
         {/* Console Nav Tabs */}
         <div className="inline-flex bg-surface-container rounded-full p-1 border border-outline-variant/10">
           <button 
+            type="button"
             onClick={() => { setSubTab('list'); setEditingPlace(null); }}
             className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all active-scale ${
               subTab === 'list' 
@@ -265,7 +371,8 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
           </button>
           
           <button 
-            onClick={() => setSubTab('onboard')}
+            type="button"
+            onClick={() => { setSubTab('onboard'); }}
             className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all active-scale ${
               subTab === 'onboard' 
                 ? 'bg-primary text-on-primary shadow-sm' 
@@ -274,6 +381,19 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
           >
             <span className="material-symbols-outlined text-[16px]">{editingPlace ? 'edit' : 'add'}</span>
             {editingPlace ? 'Revise Cafe' : 'Onboard Cafe'}
+          </button>
+
+          <button 
+            type="button"
+            onClick={() => { setSubTab('locations'); setEditingPlace(null); }}
+            className={`px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all active-scale ${
+              subTab === 'locations' 
+                ? 'bg-primary text-on-primary shadow-sm' 
+                : 'text-secondary hover:text-on-surface'
+            }`}
+          >
+            <span className="material-symbols-outlined text-[16px]">location_on</span>
+            Manage Locations ({locations.length})
           </button>
         </div>
       </div>
@@ -421,7 +541,7 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
                     onChange={(e) => setArea(e.target.value)}
                     className="px-3 py-2 bg-surface-container border border-outline-variant/35 text-on-surface rounded-xl focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent text-xs"
                   >
-                    {AREAS.map(ar => (
+                    {locations.map(ar => (
                       <option key={ar} value={ar}>{ar}</option>
                     ))}
                   </select>
@@ -653,6 +773,113 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
 
           </form>
 
+        </div>
+      )}
+
+      {subTab === 'locations' && (
+        <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-6 shadow-sm max-w-2xl mx-auto space-y-6">
+          <div>
+            <h3 className="font-display font-extrabold text-xl text-primary tracking-tight">Manage Locations</h3>
+            <p className="text-secondary text-xs mt-0.5 font-body">Create, rename, or delete local neighborhood locations. Renaming will automatically update all mapped cafés.</p>
+          </div>
+
+          {/* Add Location Form */}
+          <form onSubmit={handleAddLocation} className="flex gap-2.5 items-end bg-surface-container/30 p-4 rounded-2xl border border-outline-variant/10">
+            <div className="flex-1 flex flex-col gap-1">
+              <label className="text-[10px] font-bold text-secondary uppercase tracking-wider">New Location Name</label>
+              <input 
+                type="text" 
+                value={newLocation} 
+                onChange={(e) => setNewLocation(e.target.value)}
+                placeholder="e.g. Ring Road"
+                className="px-3 py-2 bg-surface-container border border-outline-variant/35 text-on-surface rounded-xl focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent text-xs"
+                required
+              />
+            </div>
+            <button 
+              type="submit"
+              className="px-5 py-2 bg-primary text-on-primary rounded-xl text-xs font-bold transition-all active-scale hover:bg-primary-container h-[34px]"
+            >
+              Add Area
+            </button>
+          </form>
+
+          {/* Locations List */}
+          <div className="border border-outline-variant/15 rounded-2xl overflow-hidden">
+            <table className="w-full text-left border-collapse text-xs font-body">
+              <thead>
+                <tr className="bg-surface-container text-secondary font-bold uppercase tracking-wider text-[10px] border-b border-outline-variant/15">
+                  <th className="p-4 pl-6">Location Area</th>
+                  <th className="p-4">Active Cafés</th>
+                  <th className="p-4 text-right pr-6">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-outline-variant/10">
+                {locations.map(loc => {
+                  const cafeCount = places.filter(p => p.area === loc).length;
+                  const isEditing = editingLocation === loc;
+
+                  return (
+                    <tr key={loc} className="hover:bg-surface-container/30 transition-colors">
+                      <td className="p-4 pl-6">
+                        {isEditing ? (
+                          <input 
+                            type="text"
+                            value={renameValue}
+                            onChange={(e) => setRenameValue(e.target.value)}
+                            className="px-3 py-1 bg-surface-container border border-outline-variant/35 text-on-surface rounded-lg focus:outline-none focus:ring-1 focus:ring-primary focus:border-transparent text-xs w-full max-w-[200px]"
+                            required
+                          />
+                        ) : (
+                          <span className="font-bold text-on-surface text-sm">{loc}</span>
+                        )}
+                      </td>
+                      <td className="p-4 text-secondary font-medium">
+                        {cafeCount} café{cafeCount !== 1 ? 's' : ''}
+                      </td>
+                      <td className="p-4 text-right pr-6 whitespace-nowrap">
+                        {isEditing ? (
+                          <div className="flex items-center justify-end gap-2">
+                            <button 
+                              type="button"
+                              onClick={() => handleSaveRename(loc)}
+                              className="px-3 py-1.5 bg-primary text-on-primary rounded-xl font-bold transition-all active-scale"
+                            >
+                              Save
+                            </button>
+                            <button 
+                              type="button"
+                              onClick={() => setEditingLocation(null)}
+                              className="px-3 py-1.5 bg-surface-container text-secondary rounded-xl font-bold transition-all active-scale"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-end gap-2">
+                            <button 
+                              type="button"
+                              onClick={() => handleStartRename(loc)}
+                              className="px-3 py-1.5 bg-background border border-outline-variant/30 text-secondary hover:text-primary rounded-xl font-bold transition-all active-scale"
+                            >
+                              Rename
+                            </button>
+                            <button 
+                              type="button"
+                              onClick={() => handleDeleteLocation(loc)}
+                              className="px-3 py-1.5 bg-primary/10 hover:bg-primary text-primary hover:text-on-primary rounded-xl font-bold transition-all active-scale"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
