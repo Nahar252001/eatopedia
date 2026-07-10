@@ -13,33 +13,6 @@ export const AMENITIES_CONFIG = {
 
 export const PLACES = [
   {
-    id: "terracotta-table",
-    name: "The Terracotta Table",
-    area: "Vesu",
-    address: "Ground Floor, Stellar Heights, Someshwar Enclave, Vesu, Surat - 395007",
-    photos: [
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuAl4jwW224u6ZmkRePgf0JHXrT47tlO_Cwd_oUOzjsWEe1oYjLOddUnd0MOXQxnM-F1kNroXQJYMnJhltL47kJ7teQzpkN-xbv8FKx0gc31s5T565HPojkpHjqVZYtKcvJMmLEbUoZjdymkXyyLs80LAgutXXnuoaO3T46sr-eNoGELwfsfKlGi31O2F3s-LsMmMxB8-nCy5e3PcjWPvODp5CIsG-FfHIFXNYHZRbidUxXazOmawJsA",
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCD-d_lnaVn3j88ZOe-aLLpkrS2eJ7_-W0xhra4iMrzUeraf-QVvWjAj8mPKC3ZmvNwfc9RMypLoh7fQjFkJBr-f5twCJzYguO7LyhF_hW9334_TTfyDft6-dGuEKMPQtIoPk6LZ0lB0JyRTPBeL1inPGofzo-NdDKyITt1fVi5XUcLUAlXBhoMVUU4meYeMtxCxZ8QprdGlE1rXYW9MKELCWhHSqj0MysmTjzbVJr4kjp7lPGGZzhv",
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCVtlO_0QA5qQ_4N4iV-YykxbMW17JUA19DOOjFVako5JtCp2Q8ZAjeGf6_wAR7Cc9ZpjzwJGP2M4YoDK5r397Cp0zmKl6kqH3in7lVIxd6oJEMhwXePZqty2Jv8IE_PKD7ZgZhvewWy4bsTTytrbGyoYJk1njQ7qNd3qzNBGmETSMAfYxbX8NQaBoeWHB6EGqlzTHQXtpSD0lUlXGGKEoYm8w_eEqIaWKUUPP8UL3JljnDNVtqQrpf"
-    ],
-    categories: ["best_food", "best_ambience"],
-    explanation_text: {
-      best_food: "Their signature Gujarati-Mexican fusion isn't a gimmick—the 'Thepla Tacos' with slow-cooked pulled jackfruit and hand-churned avocado crema are genuinely world-class.",
-      best_ambience: "Stunning terracotta clay plaster walls, mid-century teak furniture, and soft golden hour beams streaming in make every seat look like a high-end magazine shoot."
-    },
-    rating_count: 142,
-    amenities: ["wifi", "outlets", "pets", "parking"],
-    opening_hours: { weekdays: "9:00 AM – 11:30 PM", weekends: "8:30 AM – 12:00 AM" },
-    testimonial: { text: "The best cup of filter coffee and fusion menu in Vesu, hands down.", author: "Riya M., Local Designer" },
-    map_photo: "https://lh3.googleusercontent.com/aida-public/AB6AXuDpE_-qQIXe6oANyCvxFIdFq5BU9ipPkhJ48dqcs3HDdWGeYV6bElWpB5Jv4z4g7SY9A2Gl4OPQlesPuzkaLz4cwULgD57ppAeOv8swXwVVv2THMKGjVBvHLYJIsbZc75dV2ypnM2ypY5us1QDXT6jUTLdnbfAO2XBWSZfINzmwR7-7x4eSEZ-2Kft2o2-KkprVBDPIYZ3Kxyxo77Q9MFght2XCDXK6Qt4fVB0o0-3-EDFGZmUGoWKL",
-    aspectRatio: "card-medium",
-    must_try_dishes: [
-      { name: "Jackfruit Thepla Tacos", tag: "Fusion", description: "Soft handmade methi theplas topped with shredded spiced jackfruit, red onion pickle, and fresh lime crema.", price: "₹280" },
-      { name: "Smoked Filter Coffee Tonic", tag: "Beverage", description: "Traditional South Indian filter coffee layered over chilled elderflower tonic water with a hint of cinnamon smoke.", price: "₹220" },
-      { name: "Clay-baked Chilla Cups", tag: "Best Seller", description: "Crispy oats and lentil chilla cups filled with local cottage cheese scramble and fresh mint chutney.", price: "₹240" }
-    ]
-  },
-  {
     id: "concrete-studio",
     name: "The Concrete Studio",
     area: "Adajan",
