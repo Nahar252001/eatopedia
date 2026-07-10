@@ -315,7 +315,11 @@ export default function App() {
         )}
 
         {activeTab === 'profile' && (
-          <ProfileView />
+          <ProfileView 
+            placesList={placesList}
+            savedPlaceIds={savedPlaceIds}
+            onTabChange={onTabChange => setActiveTab(onTabChange)}
+          />
         )}
 
       </main>
