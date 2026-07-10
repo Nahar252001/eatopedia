@@ -267,17 +267,33 @@ export default function App() {
                   : "Today's Suggestions"
                 }
               </h3>
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-                {(selectedCategory ? filteredPlaces : placesList).slice(0, 3).map(place => (
-                  <PlaceCard 
-                    key={place.id}
-                    place={place}
-                    onSelect={setSelectedPlace}
-                    isSaved={savedPlaceIds.includes(place.id)}
-                    onToggleSave={handleToggleSave}
-                  />
-                ))}
-              </div>
+              {(selectedCategory ? filteredPlaces : placesList).length > 0 ? (
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                  {(selectedCategory ? filteredPlaces : placesList).slice(0, 3).map(place => (
+                    <PlaceCard 
+                      key={place.id}
+                      place={place}
+                      onSelect={setSelectedPlace}
+                      isSaved={savedPlaceIds.includes(place.id)}
+                      onToggleSave={handleToggleSave}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-16 text-center bg-surface-container-low border border-outline-variant/15 p-8 rounded-2xl">
+                  <span className="material-symbols-outlined text-[48px] text-secondary/35 mb-3">storefront</span>
+                  <h4 className="font-display font-bold text-base text-on-surface">No spots onboarded yet</h4>
+                  <p className="text-secondary text-xs max-w-sm mt-1 leading-relaxed font-body">
+                    Start curating your local guides by adding spots through the Eatopedia Admin Console.
+                  </p>
+                  <button 
+                    onClick={() => window.location.hash = '#/admin'}
+                    className="mt-4 px-5 py-2 bg-primary text-on-primary rounded-full text-xs font-bold transition-all active-scale"
+                  >
+                    Go to Admin Console
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
