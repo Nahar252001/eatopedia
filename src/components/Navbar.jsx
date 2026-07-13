@@ -18,7 +18,7 @@ export default function Navbar({ activeTab, onTabChange, onOpenSearch }) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         >
-          <span className="text-on-surface">Pick My </span>
+          <span className="text-on-surface">Pick my </span>
           <span className="text-primary italic">Cafe</span>
         </h1>
 

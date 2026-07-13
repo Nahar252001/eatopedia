@@ -431,7 +431,7 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
         <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-5 space-y-3 shadow-sm">
           <div className="space-y-1">
             <h2 className="font-serif font-bold text-2xl tracking-tight">
-              <span className="text-on-surface">Pick My </span>
+              <span className="text-on-surface">Pick my </span>
               <span className="text-primary italic">Cafe</span>
             </h2>
           </div>
