@@ -429,12 +429,16 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
       {/* Left Sidebar Nav */}
       <aside className="w-full md:w-64 flex-shrink-0 space-y-6">
         {/* Brand/Logo Card */}
-        <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-5 space-y-3 shadow-sm">
-          <div className="space-y-1">
-            <h2 className="font-serif font-extrabold text-2xl text-primary tracking-tight">Pick My Cafe</h2>
-            <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block">Admin Console</span>
+        <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-5 space-y-4 shadow-sm flex flex-col items-center text-center">
+          <div className="flex flex-col select-none leading-[0.75] items-center text-center py-1">
+            <span className="font-serif text-2xl font-bold tracking-tight text-on-surface">Pick</span>
+            <span className="font-serif text-xs italic font-medium text-primary my-[1.5px] lowercase">my</span>
+            <span className="font-serif text-2xl font-bold tracking-tight text-on-surface lowercase">cafe</span>
           </div>
-          <p className="text-secondary text-[11px] leading-relaxed font-body">Onboard new discoveries, revise menu cards, or configure locations.</p>
+          <div className="space-y-1 w-full">
+            <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block border-t border-outline-variant/15 pt-2">Admin Console</span>
+            <p className="text-secondary text-[11px] leading-relaxed font-body pt-1">Onboard new discoveries, revise menu cards, or configure locations.</p>
+          </div>
         </div>
 
         {/* Navigation list */}
