@@ -11,17 +11,15 @@ export default function Navbar({ activeTab, onTabChange, onOpenSearch }) {
   return (
     <header className="fixed top-0 w-full z-50 glass-header flex justify-between items-center px-6 py-4 bg-background/80 backdrop-blur-xl border-b border-outline-variant/10 shadow-sm transition-all duration-300">
       <div className="flex items-center gap-8">
-        <div 
-          className="flex flex-col cursor-pointer select-none leading-[0.75] items-start text-left py-1 transition-all active:scale-95 duration-200"
+        <h1 
+          className="font-display text-xl font-extrabold tracking-tight text-on-surface cursor-pointer select-none transition-all active:scale-95 duration-200" 
           onClick={() => {
             onTabChange('discover');
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         >
-          <span className="font-serif text-2xl font-bold tracking-tight text-on-surface">Pick</span>
-          <span className="font-serif text-lg italic font-medium text-primary pl-4 my-[1px] lowercase">my</span>
-          <span className="font-serif text-2xl font-bold tracking-tight text-on-surface lowercase">cafe</span>
-        </div>
+          Pick My Cafe
+        </h1>
 
         {/* Desktop Navigation Links */}
         <nav className="hidden md:flex items-center gap-1 font-body">
