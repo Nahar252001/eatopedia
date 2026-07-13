@@ -19,7 +19,7 @@ export default function Navbar({ activeTab, onTabChange, onOpenSearch }) {
           }}
         >
           <span className="font-serif text-2xl font-bold tracking-tight text-on-surface">Pick</span>
-          <span className="font-serif text-base italic font-medium text-primary my-[1px] lowercase">my</span>
+          <span className="font-serif text-lg italic font-medium text-primary my-[1px] lowercase">my</span>
           <span className="font-serif text-2xl font-bold tracking-tight text-on-surface lowercase">cafe</span>
         </div>
 
