@@ -430,9 +430,9 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
       <aside className="w-full md:w-64 flex-shrink-0 space-y-6">
         <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-5 space-y-3 shadow-sm">
           <div className="space-y-1">
-            <h2 className="font-display font-extrabold text-xl tracking-tight">
+            <h2 className="font-serif font-bold text-2xl tracking-tight">
               <span className="text-on-surface">Pick My </span>
-              <span className="text-primary">Cafe</span>
+              <span className="text-primary italic">Cafe</span>
             </h2>
           </div>
           <div className="space-y-1 w-full">

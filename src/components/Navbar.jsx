@@ -12,14 +12,14 @@ export default function Navbar({ activeTab, onTabChange, onOpenSearch }) {
     <header className="fixed top-0 w-full z-50 glass-header flex justify-between items-center px-6 py-4 bg-background/80 backdrop-blur-xl border-b border-outline-variant/10 shadow-sm transition-all duration-300">
       <div className="flex items-center gap-8">
         <h1 
-          className="font-display text-xl font-extrabold tracking-tight cursor-pointer select-none transition-all active:scale-95 duration-200" 
+          className="font-serif text-2xl font-bold tracking-tight cursor-pointer select-none transition-all active:scale-95 duration-200" 
           onClick={() => {
             onTabChange('discover');
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         >
           <span className="text-on-surface">Pick My </span>
-          <span className="text-primary">Cafe</span>
+          <span className="text-primary italic">Cafe</span>
         </h1>
 
         {/* Desktop Navigation Links */}
