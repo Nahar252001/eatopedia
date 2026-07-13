@@ -430,7 +430,10 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
       <aside className="w-full md:w-64 flex-shrink-0 space-y-6">
         <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-5 space-y-3 shadow-sm">
           <div className="space-y-1">
-            <h2 className="font-display font-extrabold text-xl tracking-tight text-on-surface">Pick My Cafe</h2>
+            <h2 className="font-display font-extrabold text-xl tracking-tight">
+              <span className="text-on-surface">Pick My </span>
+              <span className="text-primary">Cafe</span>
+            </h2>
           </div>
           <div className="space-y-1 w-full">
             <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block border-t border-outline-variant/15 pt-2">Admin Console</span>
