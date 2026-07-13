@@ -14,10 +14,10 @@ export default function ProfileView({ placesList = [], savedPlaceIds = [], onTab
       {/* User Bio Card */}
       <div className="p-6 rounded-2xl bg-surface-container-low border border-outline-variant/20 flex items-center gap-5">
         <div className="w-20 h-20 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-display font-bold text-2xl border-2 border-primary">
-          E
+          P
         </div>
         <div>
-          <h3 className="font-display font-bold text-xl text-on-surface">Eatopedia Insider</h3>
+          <h3 className="font-display font-bold text-xl text-on-surface">Pick My Cafe Insider</h3>
           <p className="text-secondary text-xs mt-0.5 font-body">Surat, India</p>
           <p className="text-on-surface-variant text-xs mt-2 italic font-body">"Seeking aesthetic corners and hyper-local fusion eats."</p>
         </div>

@@ -35,7 +35,7 @@ export default function ShareCardModal({ place, onClose }) {
           <header className="relative z-10 flex items-center justify-between">
             <div className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-full">
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-              <span className="text-[9px] font-bold text-white uppercase tracking-wider font-body">Eatopedia Curated</span>
+              <span className="text-[9px] font-bold text-white uppercase tracking-wider font-body">Pick My Cafe Curated</span>
             </div>
             <div className="bg-primary text-on-primary text-[9px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full shadow-sm font-body">
               {place.area}, Surat
@@ -88,7 +88,7 @@ export default function ShareCardModal({ place, onClose }) {
             {/* Watermark Footer */}
             <div className="pt-2 text-center">
               <p className="text-white/40 text-[9px] tracking-widest uppercase font-body">
-                eatopedia.in • scan to discover
+                pickmycafe.in • scan to discover
               </p>
             </div>
 

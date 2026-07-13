@@ -18,7 +18,7 @@ export default function Navbar({ activeTab, onTabChange, onOpenSearch }) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
         >
-          Eatopedia
+          Pick My Cafe
         </h1>
 
         {/* Desktop Navigation Links */}

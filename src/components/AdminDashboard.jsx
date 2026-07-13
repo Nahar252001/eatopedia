@@ -431,7 +431,7 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
         {/* Brand/Logo Card */}
         <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-5 space-y-3 shadow-sm">
           <div className="space-y-1">
-            <h2 className="font-serif font-extrabold text-2xl text-primary tracking-tight">Eatopedia</h2>
+            <h2 className="font-serif font-extrabold text-2xl text-primary tracking-tight">Pick My Cafe</h2>
             <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block">Admin Console</span>
           </div>
           <p className="text-secondary text-[11px] leading-relaxed font-body">Onboard new discoveries, revise menu cards, or configure locations.</p>

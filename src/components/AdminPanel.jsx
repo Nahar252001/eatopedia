@@ -107,7 +107,7 @@ export default function AdminPanel({ onAddPlace, onClose }) {
     };
 
     onAddPlace(newPlace);
-    alert(`"${name}" has been successfully added to Eatopedia discovery list!`);
+    alert(`"${name}" has been successfully added to Pick My Cafe discovery list!`);
     onClose();
   };
 

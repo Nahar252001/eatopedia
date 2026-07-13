@@ -195,7 +195,7 @@ export default function PlaceDetailModal({ place, onClose, isSaved, onToggleSave
                   <div className="w-7 h-7 bg-primary rounded-lg flex items-center justify-center text-on-primary">
                     <span className="material-symbols-outlined text-[16px] fill-icon">auto_awesome</span>
                   </div>
-                  <h3 className="font-display font-semibold text-lg text-on-surface">Eatopedia Insider Insights</h3>
+                  <h3 className="font-display font-semibold text-lg text-on-surface">Pick My Cafe Insider Insights</h3>
                 </div>
 
                 {/* Tabs to show insights for other categories */}

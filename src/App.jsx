@@ -284,7 +284,7 @@ export default function App() {
                   <span className="material-symbols-outlined text-[48px] text-secondary/35 mb-3">storefront</span>
                   <h4 className="font-display font-bold text-base text-on-surface">No spots onboarded yet</h4>
                   <p className="text-secondary text-xs max-w-sm mt-1 leading-relaxed font-body">
-                    Start curating your local guides by adding spots through the Eatopedia Admin Console.
+                    Start curating your local guides by adding spots through the Pick My Cafe Admin Console.
                   </p>
                   <button 
                     onClick={() => window.location.hash = '#/admin'}
