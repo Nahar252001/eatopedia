@@ -428,11 +428,10 @@ export default function AdminDashboard({ places, onAddPlace, onEditPlace, onDele
       
       {/* Left Sidebar Nav */}
       <aside className="w-full md:w-64 flex-shrink-0 space-y-6">
-        {/* Brand/Logo Card */}
-        <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-5 space-y-4 shadow-sm flex flex-col items-center text-center">
-          <div className="flex flex-col select-none leading-[0.75] items-center text-center py-1">
+        <div className="bg-surface-container-low border border-outline-variant/20 rounded-3xl p-5 space-y-4 shadow-sm flex flex-col items-start text-left">
+          <div className="flex flex-col select-none leading-[0.75] items-start text-left py-1">
             <span className="font-serif text-2xl font-bold tracking-tight text-on-surface">Pick</span>
-            <span className="font-serif text-lg italic font-medium text-primary my-[1px] lowercase">my</span>
+            <span className="font-serif text-lg italic font-medium text-primary pl-4 my-[1px] lowercase">my</span>
             <span className="font-serif text-2xl font-bold tracking-tight text-on-surface lowercase">cafe</span>
           </div>
           <div className="space-y-1 w-full">
