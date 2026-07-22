@@ -55,6 +55,15 @@ export default function PlaceDetailModal({ place, onClose, isSaved, onToggleSave
           </button>
           
           <div className="flex gap-2">
+            <a 
+              href={`https://maps.google.com/?q=${encodeURIComponent(place.name + " " + place.area + " Surat")}`}
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-secondary hover:bg-surface-container-high hover:text-primary transition-colors"
+              title="Directions on Google Maps"
+            >
+              <span className="material-symbols-outlined text-[20px]">directions</span>
+            </a>
             <button 
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href);
@@ -330,17 +339,6 @@ export default function PlaceDetailModal({ place, onClose, isSaved, onToggleSave
             </div>
           </section>
         </div>
-
-        {/* Floating Action Button for Directions */}
-        <a 
-          href={`https://maps.google.com/?q=${encodeURIComponent(place.name + " " + place.area + " Surat")}`}
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 sm:absolute sm:bottom-6 sm:right-6 z-50 w-14 h-14 rounded-full bg-primary text-on-primary border border-outline-variant/15 flex items-center justify-center shadow-2xl hover:bg-white hover:text-primary hover:scale-[1.1] active:scale-95 transition-all duration-300"
-          title="Directions on Google Maps"
-        >
-          <span className="material-symbols-outlined text-[28px]">directions</span>
-        </a>
       </div>
       {shareOpen && (
         <ShareCardModal 
