@@ -12,6 +12,20 @@ import AdminDashboard from './components/AdminDashboard';
 import { PLACES, CATEGORIES } from './data/places';
 
 export default function App() {
+  // One-time local storage reset for clean database onboarding
+  try {
+    const resetKey = 'mojmaa_reset_2026_07_22';
+    if (localStorage.getItem(resetKey) !== 'true') {
+      localStorage.removeItem('mojmaa_custom_places');
+      localStorage.removeItem('mojmaa_deleted_places');
+      localStorage.removeItem('mojmaa_edited_default_places');
+      localStorage.removeItem('mojmaa_shortlist');
+      localStorage.setItem(resetKey, 'true');
+    }
+  } catch (e) {
+    console.error('Failed to reset localStorage', e);
+  }
+
   const [activeTab, setActiveTab] = useState('discover'); // discover, moods, saved, profile
   const [selectedCategory, setSelectedCategory] = useState(null); // category filter
   const [searchQuery, setSearchQuery] = useState('');
