@@ -89,7 +89,7 @@ export default function PlaceDetailModal({ place, onClose, isSaved, onToggleSave
                   href={`https://maps.google.com/?q=${encodeURIComponent(place.name + " " + place.area + " Surat")}`}
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="absolute bottom-4 right-4 md:bottom-12 md:right-12 lg:bottom-20 lg:right-20 z-20 w-12 h-12 rounded-full bg-primary text-on-primary border border-outline-variant/15 flex items-center justify-center shadow-lg hover:bg-white hover:text-primary hover:scale-[1.1] active:scale-95 transition-all duration-300"
+                  className="absolute bottom-4 right-4 md:bottom-6 md:right-6 lg:bottom-8 lg:right-8 z-20 w-12 h-12 rounded-full bg-primary text-on-primary border border-outline-variant/15 flex items-center justify-center shadow-lg hover:bg-white hover:text-primary hover:scale-[1.1] active:scale-95 transition-all duration-300"
                   title="Directions on Google Maps"
                 >
                   <span className="material-symbols-outlined text-[24px]">directions</span>
