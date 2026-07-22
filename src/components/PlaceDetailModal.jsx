@@ -82,18 +82,8 @@ export default function PlaceDetailModal({ place, onClose, isSaved, onToggleSave
           {place.photos && place.photos.length > 0 && (
             <section className="grid grid-cols-1 md:grid-cols-12 gap-4 h-[280px] md:h-[400px] rounded-2xl overflow-hidden animate-in fade-in duration-300">
               {/* Main Photo Column */}
-              <div className={`${place.photos.length === 1 ? 'md:col-span-12' : 'md:col-span-8'} h-full overflow-hidden relative`}>
+              <div className={`${place.photos.length === 1 ? 'md:col-span-12' : 'md:col-span-8'} h-full overflow-hidden`}>
                 <img src={place.photos[0]} alt={place.name} className="w-full h-full object-cover" />
-                {/* Google Maps shortcut icon in the photo bottom-right corner */}
-                <a 
-                  href={`https://maps.google.com/?q=${encodeURIComponent(place.name + " " + place.area + " Surat")}`}
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="absolute bottom-4 right-4 md:bottom-6 md:right-6 lg:bottom-8 lg:right-8 z-20 w-12 h-12 rounded-full bg-primary text-on-primary border border-outline-variant/15 flex items-center justify-center shadow-lg hover:bg-white hover:text-primary hover:scale-[1.1] active:scale-95 transition-all duration-300"
-                  title="Directions on Google Maps"
-                >
-                  <span className="material-symbols-outlined text-[24px]">directions</span>
-                </a>
               </div>
 
               {/* Secondary Photos Column */}
@@ -340,6 +330,17 @@ export default function PlaceDetailModal({ place, onClose, isSaved, onToggleSave
             </div>
           </section>
         </div>
+
+        {/* Floating Action Button for Directions */}
+        <a 
+          href={`https://maps.google.com/?q=${encodeURIComponent(place.name + " " + place.area + " Surat")}`}
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="fixed bottom-6 right-6 sm:absolute sm:bottom-6 sm:right-6 z-50 w-14 h-14 rounded-full bg-primary text-on-primary border border-outline-variant/15 flex items-center justify-center shadow-2xl hover:bg-white hover:text-primary hover:scale-[1.1] active:scale-95 transition-all duration-300"
+          title="Directions on Google Maps"
+        >
+          <span className="material-symbols-outlined text-[28px]">directions</span>
+        </a>
       </div>
       {shareOpen && (
         <ShareCardModal 
