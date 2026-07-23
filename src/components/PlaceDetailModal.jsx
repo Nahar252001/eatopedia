@@ -82,7 +82,7 @@ export default function PlaceDetailModal({ place, onClose, isSaved, onToggleSave
           {place.photos && place.photos.length > 0 && (
             <section className="grid grid-cols-1 md:grid-cols-12 gap-4 h-[280px] md:h-[400px] rounded-2xl overflow-hidden animate-in fade-in duration-300">
               {/* Main Photo Column */}
-              <div className={`${place.photos.length === 1 ? 'md:col-span-12' : 'md:col-span-8'} h-full overflow-hidden relative`}>
+              <div className={`${place.photos.length === 1 ? 'md:col-span-12' : 'md:col-span-8'} h-full overflow-hidden`} style={{ position: 'relative' }}>
                 <img src={place.photos[0]} alt={place.name} className="w-full h-full object-cover" />
                 {/* Google Maps directions icon positioned at bottom-left corner of the photo */}
                 <a 
