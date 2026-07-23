@@ -90,6 +90,7 @@ export default function PlaceDetailModal({ place, onClose, isSaved, onToggleSave
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="absolute bottom-4 left-4 md:bottom-6 md:left-6 lg:bottom-8 lg:left-8 z-20 w-12 h-12 rounded-full bg-primary text-on-primary border border-outline-variant/15 flex items-center justify-center shadow-lg hover:bg-white hover:text-primary hover:scale-[1.1] active:scale-95 transition-all duration-300"
+                  style={{ zIndex: 9999 }}
                   title="Directions on Google Maps"
                 >
                   <span className="material-symbols-outlined text-[24px]">directions</span>
