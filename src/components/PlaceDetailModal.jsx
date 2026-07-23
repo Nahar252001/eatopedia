@@ -89,11 +89,27 @@ export default function PlaceDetailModal({ place, onClose, isSaved, onToggleSave
                   href={`https://maps.google.com/?q=${encodeURIComponent(place.name + " " + place.area + " Surat")}`}
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="absolute bottom-4 left-4 md:bottom-6 md:left-6 lg:bottom-8 lg:left-8 z-20 w-12 h-12 rounded-full bg-primary text-on-primary border border-outline-variant/15 flex items-center justify-center shadow-lg hover:bg-white hover:text-primary hover:scale-[1.1] active:scale-95 transition-all duration-300"
-                  style={{ zIndex: 9999 }}
+                  style={{
+                    position: 'absolute',
+                    bottom: '16px',
+                    left: '16px',
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '50%',
+                    backgroundColor: '#aa3001',
+                    color: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.3)',
+                    zIndex: 9999,
+                    border: '1px solid rgba(225, 191, 182, 0.15)',
+                    textDecoration: 'none'
+                  }}
+                  className="hover:scale-[1.1] active:scale-95 transition-all duration-300"
                   title="Directions on Google Maps"
                 >
-                  <span className="material-symbols-outlined text-[24px]">directions</span>
+                  <span className="material-symbols-outlined text-[24px]" style={{ color: '#ffffff' }}>directions</span>
                 </a>
               </div>
 
